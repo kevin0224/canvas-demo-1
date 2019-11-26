@@ -8,24 +8,37 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="canvas"></div>
+    <canvas id="canvas" width="100" height="100"></canvas>
     <script>
-      canvas.onclick = e => {
-        console.log(e);
-        console.log(e.clientX);
-        console.log(e.clientY); //console.log调试大法
-        let div = document.createElement("div");
-        div.style.position = "absolute";
-        div.style.top = e.clientY + "px";
-        div.style.left = e.clientX + "px";
-        // div.style.border = "1px solid red";
-        div.style.width = "6px";
-        div.style.height = "6px";
-        div.style.marginTop = "-3px";
-        div.style.marginLeft = "-3px";
-        div.style.borderRadius = "50%";
-        div.style.backgroundColor = "black";
-        canvas.appendChild(div);
+      let canvas = document.getElementById("canvas"); //通过id拿到canvas let替换var
+      canvas.width = document.documentElement.clientWidth; //画布的宽等于屏幕宽
+      canvas.height = document.documentElement.clientHeight; //高
+      let ctx = canvas.getContext("2d");
+      ctx.fillStyle = "black"; //画线颜色
+      ctx.stockStyle = "none"; //没有边框线
+      let painting = false; //默认没在绘画
+      canvas.onmousedown = () => {
+        //鼠标按下事件
+        painting = true; //在画
+      };
+
+      canvas.onmousemove = e => {
+        //鼠标移动事件 onclick鼠标点击事件
+        if (painting === true) {
+          console.log(e.clientX); //x点击坐标
+          console.log(e.clientY); //y点击坐标
+          //ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10); //方形 起始x坐标，起始y坐标，宽度，高度 -5px为了鼠标在正中间
+          ctx.beginPath(); //圆形开始
+          ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI); //圆形 起始x坐标，起始y坐标，半径，角度
+          ctx.stroke(); //圆形
+          ctx.fill(); //实心
+        } else {
+          console.log("啥也没干");
+        }
+      };
+      canvas.onmouseup = () => {
+        //鼠标抬起事件
+        painting = false;
       };
     </script>
   </body>
